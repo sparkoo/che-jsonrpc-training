@@ -15,10 +15,12 @@ var upgrader = websocket.Upgrader{}
 
 func main() {
 	http.HandleFunc("/", echo)
+	fmt.Println("listening ...")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func echo(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("client connected")
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Print("upgrade:", err)
