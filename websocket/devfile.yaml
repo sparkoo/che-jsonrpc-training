@@ -1,0 +1,38 @@
+apiVersion: 1.0.0
+metadata:
+  name: chejsonrpc-websocket
+
+attributes:
+  persistVolumes: 'false'
+
+projects:
+  - name: websocket-demo
+    source:
+      location: https://github.com/sparkoo/che-jsonrpc-training
+      type: git
+      sparseCheckoutDir: websocket
+
+components:
+  - type: dockerimage
+    # this version is used in the plugin
+    image: quay.io/eclipse/che-golang-1.12:7.9.1
+    alias: go-cli
+    endpoints:
+      - name: '8080/tcp'
+        port: 8080
+    memoryLimit: 256Mi
+    mountSources: true
+
+commands:
+  - name: run server
+    actions:
+    - type: exec
+      component: go-cli
+      workdir: ${CHE_PROJECTS_ROOT}/websocket-demo/websocket
+      command: go mod download && go run server.go
+  - name: run curl client
+    actions:
+    - type: exec
+      component: go-cli
+      workdir: ${CHE_PROJECTS_ROOT}/websocket-demo/websocket
+      command: sh client.sh
