@@ -14,13 +14,17 @@ projects:
 
 components:
   - type: dockerimage
-    # this version is used in the plugin
     image: quay.io/eclipse/che-golang-1.12:7.9.1
     alias: go-cli
     endpoints:
       - name: '8080/tcp'
         port: 8080
     memoryLimit: 256Mi
+    mountSources: true
+  - type: dockerimage
+    image: quay.io/eclipse/che-nodejs8-centos:nightly
+    alias: nodejs
+    memoryLimit: 512Mi
     mountSources: true
 
 commands:
@@ -36,3 +40,9 @@ commands:
       component: go-cli
       workdir: ${CHE_PROJECTS_ROOT}/websocket-demo/websocket
       command: sh client.sh
+  - name: run nodejs client
+    actions:
+    - type: exec
+      component: nodejs
+      workdir: ${CHE_PROJECTS_ROOT}/websocket-demo/websocket
+      command: npm install && node client.js
