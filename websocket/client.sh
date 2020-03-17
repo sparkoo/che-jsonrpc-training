@@ -1,3 +1,7 @@
+#!/bin/bash
+
+set -x
+
 curl -v --include --no-buffer \
 --header "Connection: Upgrade" \
 --header "Upgrade: websocket" \
