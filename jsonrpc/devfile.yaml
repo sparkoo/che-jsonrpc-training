@@ -1,0 +1,34 @@
+apiVersion: 1.0.0
+metadata:
+  name: chejsonrpc-jsonrpc
+
+attributes:
+  persistVolumes: 'false'
+
+projects:
+  - name: jsonrpc-demo
+    source:
+      location: https://github.com/sparkoo/che-jsonrpc-training
+      type: git
+      sparseCheckoutDir: jsonrpc
+
+components:
+  - type: dockerimage
+    image: quay.io/eclipse/che-nodejs8-centos:nightly
+    alias: nodejs
+    memoryLimit: 512Mi
+    mountSources: true
+
+commands:
+  - name: run server
+    actions:
+    - type: exec
+      component: nodejs
+      workdir: ${CHE_PROJECTS_ROOT}/jsonrpc-demo/jsonrpc
+      command: npm install && node server.js
+  - name: run curl client
+    actions:
+    - type: exec
+      component: nodejs
+      workdir: ${CHE_PROJECTS_ROOT}/jsonrpc-demo/jsonrpc
+      command: sh client.sh
